@@ -1,54 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Sistema de Gestión Hospitalaria</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>Sistema de Gestión Hospitalaria</title>
 
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-</head>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+    </head>
 
-<body>
+    <body>
 
-    <div class="container mt-5">
+        <div class="container mt-5">
 
-        <h1 class="text-center">
-            Sistema de Gestión Hospitalaria
-        </h1>
+            <h1 class="text-center">
+                Sistema de Gestión Hospitalaria
+            </h1>
 
-        <p class="text-center">
-            Bienvenido al panel administrativo.
-        </p>
+            <p class="text-center">
+                Panel administrativo.
+            </p>
 
-        <hr>
+            <hr>
 
-        <div class="row mt-4">
+            <div class="row mt-4">
 
-            <div class="col-md-4">
-                <a th:href="@{/pacientes}"
-                   class="btn btn-primary w-100">
-                    Gestionar Pacientes
-                </a>
+                <div class="col-md-4">
+                    <a th:href="@{/pacientes}"
+                       class="btn btn-primary w-100">
+                        Gestionar Pacientes
+                    </a>
+                </div>
+
+                <div class="col-md-4">
+                    <a th:href="@{/medicos}"
+                       class="btn btn-success w-100">
+                        Gestionar Médicos
+                    </a>
+                </div>
+
+                <div class="col-md-4">
+                    <a th:href="@{/camas}"
+                       class="btn btn-secondary w-100">
+                        Gestionar Camas
+                    </a>
+                </div>
+
+
             </div>
-
-            <div class="col-md-4">
-                <a th:href="@{/medicos}"
-                   class="btn btn-success w-100">
-                    Gestionar Médicos
-                </a>
-            </div>
-
-            <div class="col-md-4">
-                <a th:href="@{/camas}"
-                   class="btn btn-secondary w-100">
-                    Gestionar Camas
+            <div class="row mt-4">
+                <a data-th-href="@{/asignaciones}"
+                   class="btn btn-info">
+                    Gestionar asignaciones médicas
                 </a>
             </div>
 
         </div>
 
-    </div>
-
-</body>
+    </body>
 </html>

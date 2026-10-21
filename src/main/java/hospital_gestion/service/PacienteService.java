@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
  *
  * @author Ian
@@ -104,5 +105,10 @@ public class PacienteService {
         }
 
         pacienteRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Paciente> listarPacientesConMedico() {
+        return pacienteRepository.findAllBy();
     }
 }

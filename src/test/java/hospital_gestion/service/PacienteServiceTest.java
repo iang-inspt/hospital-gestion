@@ -2,6 +2,7 @@ package hospital_gestion.service;
 
 import hospital_gestion.entity.Paciente;
 import hospital_gestion.repository.PacienteRepository;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +91,10 @@ public class PacienteServiceTest {
         pacienteService.eliminarPaciente(id);
 
         assertFalse(pacienteRepository.existsById(id));
+    }
+    //agregado para manejar asignaciones
+    @Transactional(readOnly = true)
+    public List<Paciente> listarPacientesConMedico() {
+        return pacienteRepository.findAllBy();
     }
 }
