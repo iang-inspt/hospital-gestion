@@ -2,15 +2,14 @@ package hospital_gestion.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-/**
- *
- * @author Ian
- */
 @Entity
 @Table(name = "pacientes")
 public class Paciente {
@@ -24,6 +23,11 @@ public class Paciente {
     private String nombre;
     @Column(nullable = false, length = 100)
     private String apellido;
+    //se agrega relacion PACIENTE N-1 MEDICO
+    //lado propietario de la relacion > contiene la FK
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "medico_id")
+    private Medico medico;
 
     public Paciente() {
     }
@@ -37,7 +41,7 @@ public class Paciente {
     public Long getId() {
         return id;
     }
-    
+
     public String getDni() {
         return dni;
     }
@@ -61,6 +65,14 @@ public class Paciente {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
-    
-    
+
+    //Una vez agregada la relacion con medico ->
+    public Medico getMedico() {
+        return medico;
+    }
+
+    public void setMedico(Medico medico) {
+        this.medico = medico;
+    }
+
 }
