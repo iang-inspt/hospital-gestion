@@ -1,5 +1,6 @@
 package hospital_gestion.service;
 
+import hospital_gestion.entity.Cama;
 import hospital_gestion.entity.Paciente;
 import hospital_gestion.repository.PacienteRepository;
 import java.util.List;
@@ -20,6 +21,12 @@ public class PacienteServiceTest {
 
     @Autowired
     private PacienteRepository pacienteRepository;
+
+    @Autowired
+    private CamaService camaService;
+
+    @Autowired
+    private ReservaService reservaService;
 
     @Test
     void registrarPacienteCorrectamente() {
@@ -92,6 +99,40 @@ public class PacienteServiceTest {
 
         assertFalse(pacienteRepository.existsById(id));
     }
+
+    @Test
+    void noEliminarPacienteConCamaReservada() {
+
+        // Crear paciente
+        Paciente paciente = pacienteService.registrarPaciente(
+                "TEST-RESERVA-001",
+                "Juan",
+                "Perez"
+        );
+
+        // Crear cama
+        Cama cama = camaService.registrarCama(
+                "CAMA-950",
+                1
+        );
+
+        // Reservar cama para el paciente
+        reservaService.reservarCama(
+                cama.getId(),
+                paciente.getId()
+        );
+
+        // Intentar eliminar paciente
+        assertThrows(IllegalArgumentException.class, ()
+                -> pacienteService.eliminarPaciente(paciente.getId())
+        );
+
+        // Comprobar que el paciente sigue existiendo
+        assertTrue(
+                pacienteService.buscarPorId(paciente.getId()).isPresent()
+        );
+    }
+
     //agregado para manejar asignaciones
     @Transactional(readOnly = true)
     public List<Paciente> listarPacientesConMedico() {

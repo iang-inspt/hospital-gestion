@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+//validacion de integridad CAMA-PACIENTE
+import hospital_gestion.repository.CamaRepository;
 
 /**
  *
@@ -19,10 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class PacienteService {
 
     private final PacienteRepository pacienteRepository;
+    private final CamaRepository camaRepository;
 
     // Inyección de dependencias
-    public PacienteService(PacienteRepository pacienteRepository) {
+    public PacienteService(
+            PacienteRepository pacienteRepository,
+            CamaRepository camaRepository) {
         this.pacienteRepository = pacienteRepository;
+        this.camaRepository = camaRepository;
     }
 
     // CREATE
@@ -98,12 +104,21 @@ public class PacienteService {
     @Transactional
     public void eliminarPaciente(Long id) {
 
+        // 1. Verificar existencia del paciente
         if (!pacienteRepository.existsById(id)) {
             throw new IllegalArgumentException(
                     "Paciente no encontrado"
             );
         }
 
+        // 2. Verificar si tiene una cama reservada
+        if (camaRepository.existsByPacienteId(id)) {
+            throw new IllegalArgumentException(
+                    "No se puede eliminar el paciente porque tiene una cama reservada"
+            );
+        }
+
+        // 3. Eliminar paciente
         pacienteRepository.deleteById(id);
     }
 

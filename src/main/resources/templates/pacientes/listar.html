@@ -12,11 +12,14 @@
         <div class="container mt-5">
 
             <h1>Gestión de Pacientes</h1>
+            <div data-th-if="${error}"
+                 class="alert alert-danger"
+                 data-th-text="${error}">
+            </div>
             <div data-th-if="${mensaje}"
                  class="alert alert-success"
                  data-th-text="${mensaje}">
             </div>
-
             <div data-th-if="${error}"
                  class="alert alert-danger"
                  data-th-text="${error}">
@@ -27,7 +30,6 @@
             </a>
 
             <table class="table table-striped">
-
                 <thead>
                     <tr>
                         <th>ID</th>
