@@ -27,4 +27,10 @@ public interface CamaRepository extends JpaRepository<Cama, Long> {
     //la relación esté cargada
     @EntityGraph(attributePaths = {"paciente"})
     List<Cama> findAllBy();
+    
+    //consulta
+    Optional<Cama> findByPacienteId(Long pacienteId);
+    /* el repositorio interpreta el nombre del metodo como una consulta sobre la relacion Cama.paciente.id
+    equivale a SELECT * FROM CAMAS WHERE paciente_id= ?
+    */
 }

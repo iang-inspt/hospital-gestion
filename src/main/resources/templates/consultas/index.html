@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultas Hospitalarias</title>
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container mt-5">
+
+    <h1>Consultas Hospitalarias</h1>
+
+    <p class="text-muted">
+        Consultar relaciones entre pacientes, médicos y camas.
+    </p>
+
+    <!-- MENSAJES DE ERROR -->
+    <div data-th-if="${error}"
+         class="alert alert-danger"
+         data-th-text="${error}">
+    </div>
+
+    <!-- CONSULTA 1: CAMA DE UN PACIENTE -->
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h4>Cama asignada a un paciente</h4>
+
+            <form data-th-action="@{/consultas/cama}"
+                  method="get">
+
+                <div class="mb-3">
+                    <label for="pacienteCama"
+                           class="form-label">
+                        Seleccionar paciente
+                    </label>
+
+                    <select id="pacienteCama"
+                            name="pacienteId"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccionar paciente
+                        </option>
+
+                        <option data-th-each="paciente : ${pacientes}"
+                                data-th-value="${paciente.id}"
+                                data-th-text="${paciente.nombre + ' ' + paciente.apellido + ' - DNI: ' + paciente.dni}">
+                        </option>
+
+                    </select>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Consultar cama
+                </button>
+            </form>
+
+            <!-- RESULTADO -->
+            <div data-th-if="${resultadoCama != null}"
+                 class="alert alert-info mt-3">
+
+                <strong data-th-text="${resultadoCama.nombrePaciente}">
+                </strong>
+
+                <div data-th-if="${resultadoCama.codigoCama != null}">
+                    <p class="mb-0">
+                        Cama:
+                        <span data-th-text="${resultadoCama.codigoCama}"></span>
+                    </p>
+                    <p class="mb-0">
+                        Piso:
+                        <span data-th-text="${resultadoCama.piso}"></span>
+                    </p>
+                </div>
+
+                <p data-th-if="${resultadoCama.codigoCama == null}"
+                   class="mb-0">
+                    El paciente no tiene cama reservada.
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSULTA 2: PACIENTES DE UN MÉDICO -->
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h4>Pacientes atendidos por un médico</h4>
+
+            <form data-th-action="@{/consultas/medico-pacientes}"
+                  method="get">
+
+                <div class="mb-3">
+                    <label for="medicoPacientes"
+                           class="form-label">
+                        Seleccionar médico
+                    </label>
+
+                    <select id="medicoPacientes"
+                            name="medicoId"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccionar médico
+                        </option>
+
+                        <option data-th-each="medico : ${medicos}"
+                                data-th-value="${medico.id}"
+                                data-th-text="${medico.nombre + ' ' + medico.apellido + ' - ' + medico.especialidad}">
+                        </option>
+
+                    </select>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Consultar pacientes
+                </button>
+            </form>
+
+            <!-- RESULTADO -->
+            <div data-th-if="${pacientesDelMedico != null}"
+                 class="mt-3">
+
+                <h5>
+                    Pacientes de
+                    <span data-th-text="${nombreMedicoConsultado}"></span>
+                </h5>
+
+                <p data-th-if="${#lists.isEmpty(pacientesDelMedico)}"
+                   class="alert alert-info">
+                    Este médico no tiene pacientes asignados.
+                </p>
+
+                <table data-th-unless="${#lists.isEmpty(pacientesDelMedico)}"
+                       class="table table-striped">
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>DNI</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr data-th-each="paciente : ${pacientesDelMedico}">
+                            <td data-th-text="${paciente.id}"></td>
+                            <td data-th-text="${paciente.dni}"></td>
+                            <td data-th-text="${paciente.nombre}"></td>
+                            <td data-th-text="${paciente.apellido}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONSULTA 3: MÉDICO DE UN PACIENTE -->
+    <div class="card mb-4">
+        <div class="card-body">
+
+            <h4>Médico asignado a un paciente</h4>
+
+            <form data-th-action="@{/consultas/paciente-medico}"
+                  method="get">
+
+                <div class="mb-3">
+                    <label for="pacienteMedico"
+                           class="form-label">
+                        Seleccionar paciente
+                    </label>
+
+                    <select id="pacienteMedico"
+                            name="pacienteId"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            Seleccionar paciente
+                        </option>
+
+                        <option data-th-each="paciente : ${pacientes}"
+                                data-th-value="${paciente.id}"
+                                data-th-text="${paciente.nombre + ' ' + paciente.apellido + ' - DNI: ' + paciente.dni}">
+                        </option>
+
+                    </select>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Consultar médico
+                </button>
+            </form>
+
+            <!-- RESULTADO -->
+            <div data-th-if="${resultadoMedico != null}"
+                 class="alert alert-info mt-3">
+
+                <strong data-th-text="${resultadoMedico.nombrePaciente}">
+                </strong>
+
+                <div data-th-if="${resultadoMedico.nombreMedico != null}">
+                    <p class="mb-0">
+                        Médico:
+                        <span data-th-text="${resultadoMedico.nombreMedico}"></span>
+                    </p>
+                    <p class="mb-0">
+                        Especialidad:
+                        <span data-th-text="${resultadoMedico.especialidad}"></span>
+                    </p>
+                </div>
+
+                <p data-th-if="${resultadoMedico.nombreMedico == null}"
+                   class="mb-0">
+                    El paciente no tiene médico asignado.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <a data-th-href="@{/}"
+       class="btn btn-secondary mb-4">
+        Volver al inicio
+    </a>
+
+</div>
+
+</body>
+</html>
